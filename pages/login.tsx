@@ -1,35 +1,17 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "urql";
 
 type Inputs = {
   username: string;
   password: string;
-  confirmPassword: string;
+  rememberMe: boolean;
 };
 
 interface registerProps {}
 
-const REGISTER_MUT = `
-mutation($username: String!, $password: String!) {
-  register(options: {username: $username, password: $password}) {
-    user {
-      id
-      username
-    }
-    errors {
-      field
-      message
-    }
-  }
-}
-`;
-
-const Register: React.FC<registerProps> = ({}) => {
-  const [, registerUser] = useMutation(REGISTER_MUT);
+const Login: React.FC<registerProps> = ({}) => {
   const { register, handleSubmit, errors } = useForm<Inputs>();
   const onSubmit = (data) => {
-    registerUser(data);
     console.log("submit: ", data);
   };
 
@@ -48,7 +30,7 @@ const Register: React.FC<registerProps> = ({}) => {
               alt="Workflow"
             />
             <h2 className="mt-6 text-3xl leading-9 font-extrabold text-gray-900">
-              Create new account
+              Sign in to your account
             </h2>
           </div>
 
@@ -77,23 +59,16 @@ const Register: React.FC<registerProps> = ({}) => {
                         required: true,
                         minLength: {
                           value: 3,
-                          message: "username must have at least 3 characters",
+                          message: "Username must have at least 3 characters",
                         },
                         maxLength: {
                           value: 30,
-                          message: "username must have at most 30 characters",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z0-9-_]+$/i,
-                          message: "Allowed characters: letters, numbers, _-",
+                          message: "Username must have at most 30 characters",
                         },
                       })}
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     />
-                  </div>
-                  <div className="absolute text-red-700 text-xs">
-                    {errors?.username?.message}
                   </div>
                 </div>
 
@@ -119,43 +94,37 @@ const Register: React.FC<registerProps> = ({}) => {
                           value: 99,
                           message: "Password must have at most 99 characters",
                         },
-                        pattern: {
-                          value: /^[A-Za-z0-9-_!@#$%^&*()_-]+$/i,
-                          message:
-                            "Allowed characters: letters, numbers, !@#$%^&*()_-",
-                        },
                       })}
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     />
-                  </div>
-                  <div className="absolute text-red-700 text-xs">
-                    {errors?.password?.message}
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Confirm Password
-                  </label>
-                  <div className="mt-1 rounded-md shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
                     <input
-                      id="confirmPassword"
-                      type="password"
-                      name="confirmPassword"
-                      ref={register({
-                        validate: (value) =>
-                          value === "abc" || "Passwords don't match",
-                      })}
-                      required
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                      id="remember_me"
+                      type="checkbox"
+                      name="remember_me"
+                      ref={register({ required: true })}
+                      className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                     />
+                    <label
+                      htmlFor="remember_me"
+                      className="ml-2 block text-sm leading-5 text-gray-900"
+                    >
+                      Remember me
+                    </label>
                   </div>
-                  <div className="absolute text-red-700 text-xs">
-                    {errors?.confirmPassword?.message}
+
+                  <div className="text-sm leading-5">
+                    <a
+                      href="#"
+                      className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+                    >
+                      Forgot your password?
+                    </a>
                   </div>
                 </div>
 
@@ -165,7 +134,7 @@ const Register: React.FC<registerProps> = ({}) => {
                       type="submit"
                       className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                     >
-                      Register
+                      Sign in
                     </button>
                   </span>
                 </div>
@@ -185,4 +154,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default Login;
