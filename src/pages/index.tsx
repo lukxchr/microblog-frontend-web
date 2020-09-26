@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { AuthLayout } from "../components/AuthLayout";
+import { MainLayout } from "../components/MainLayout";
 //import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -9,10 +9,10 @@ export default function Home() {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AuthLayout header="hello text text">
-        <div>Hello world</div>
-        <div>Hello world</div>
-      </AuthLayout>
+      <MainLayout>
+        {/* <div>Hello world</div>
+        <div>Hello world</div> */}
+      </MainLayout>
     </div>
   );
 }
