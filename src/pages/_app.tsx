@@ -10,7 +10,7 @@ const client = createClient({
 function MyApp({ Component, pageProps }) {
   return (
     <Provider value={client}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Provider>
   );
 }

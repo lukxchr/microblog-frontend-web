@@ -9,6 +9,7 @@
     "gen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@tailwindui/react": "^0.1.1",
     "graphql": "^15.3.0",
     "next": "9.5.3",
     "react": "16.13.1",
