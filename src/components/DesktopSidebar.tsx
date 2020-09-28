@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { useLogoutMutation } from "../generated/graphql";
 import { getInitialsForUsername } from "../utils/misc";
 
 interface DesktopSidebarProps {
@@ -7,6 +8,8 @@ interface DesktopSidebarProps {
 }
 
 export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ username }) => {
+  const [, logout] = useLogoutMutation();
+
   return (
     <div className="hidden md:flex md:flex-shrink-0">
       <div className="flex flex-col w-64">
@@ -187,11 +190,12 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ username }) => {
                   {username || "Anonymous"}
                 </p>
                 {username ? (
-                  <Link href="/logout">
-                    <a className="text-xs leading-4 font-medium text-gray-300 group-hover:text-gray-200 transition ease-in-out duration-150">
-                      Log out
-                    </a>
-                  </Link>
+                  <a
+                    className="text-xs leading-4 font-medium text-gray-300 group-hover:text-gray-200 transition ease-in-out duration-150 cursor-pointer"
+                    onClick={() => logout()}
+                  >
+                    Log out
+                  </a>
                 ) : (
                   <Link href="/login">
                     <a className="text-xs leading-4 font-medium text-gray-300 group-hover:text-gray-200 transition ease-in-out duration-150">

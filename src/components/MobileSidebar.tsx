@@ -2,6 +2,7 @@ import React from "react";
 import { Transition } from "@tailwindui/react";
 import Link from "next/link";
 import { getInitialsForUsername } from "../utils/misc";
+import { useLogoutMutation } from "../generated/graphql";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -14,7 +15,8 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
   setIsOpen,
   username,
 }) => {
-  // if (!isOpen) return null;
+  const [, logout] = useLogoutMutation();
+
   return (
     <div className="md:hidden">
       {/* <div className="fixed inset-0 flex z-40"> */}
@@ -259,11 +261,12 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                 </p>
 
                 {username ? (
-                  <Link href="/logout">
-                    <a className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                      Log out
-                    </a>
-                  </Link>
+                  <a
+                    className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 cursor-pointer"
+                    onClick={() => logout()}
+                  >
+                    Log out
+                  </a>
                 ) : (
                   <Link href="/login">
                     <a className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">

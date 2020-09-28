@@ -1,4 +1,4 @@
-export const getInitialsForUsername = (username: string) => {
+export const getInitialsForUsername = (username?: string) => {
   if (!username) {
     return "?";
   }

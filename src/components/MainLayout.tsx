@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMeQuery } from "../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileSidebar } from "./MobileSidebar";
 
@@ -8,7 +8,7 @@ interface MainLayoutProps {}
 export const MainLayout: React.FC<MainLayoutProps> = ({}) => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
-  let username: string;
+  let username: string = "";
   const [{ data, fetching }] = useMeQuery();
   if (fetching) {
   } else if (!data?.me) {
