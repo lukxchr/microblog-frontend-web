@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { useLogoutMutation } from "../generated/graphql";
-import { getInitialsForUsername } from "../utils/misc";
+import { getInitialsForUsername } from "../utils/getInitialsForUsername";
 
 interface DesktopSidebarProps {
   username?: string;

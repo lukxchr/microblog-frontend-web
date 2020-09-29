@@ -1,7 +1,7 @@
 import React from "react";
 import { Transition } from "@tailwindui/react";
 import Link from "next/link";
-import { getInitialsForUsername } from "../utils/misc";
+import { getInitialsForUsername } from "../utils/getInitialsForUsername";
 import { useLogoutMutation } from "../generated/graphql";
 
 interface MobileSidebarProps {

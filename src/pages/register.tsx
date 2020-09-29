@@ -5,6 +5,8 @@ import { useRegisterMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { FormField } from "../components/FormField";
 import { FormSubmit } from "../components/FormSubmit";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 type Inputs = {
   username: string;
@@ -28,7 +30,6 @@ const Register: React.FC<registerProps> = ({}) => {
 
   const password = watch("password");
   const onSubmit = async (data) => {
-    console.log("submitting", data);
     let response = await registerUser(data);
     if (response.data?.register.errors) {
       response.data.register.errors.forEach(({ field, message }) => {
@@ -72,4 +73,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);

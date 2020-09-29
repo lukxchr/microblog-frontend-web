@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useLoginMutation } from "../generated/graphql";
 import { FormField } from "../components/FormField";
 import { FormSubmit } from "../components/FormSubmit";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 type Inputs = {
   username: string;
@@ -35,7 +37,6 @@ const Login: React.FC<registerProps> = ({}) => {
     }
   };
 
-  useEffect(() => console.log(errors), [errors]);
   return (
     <AuthLayout header="Sign in to your account">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -83,4 +84,4 @@ const Login: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login);

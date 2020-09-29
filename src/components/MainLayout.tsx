@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { isServer } from "../utils/isServer";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileSidebar } from "./MobileSidebar";
 
@@ -9,7 +10,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({}) => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
   let username: string = "";
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer(), //don't run if page is SSRed (no user without cookie)
+  });
   if (fetching) {
   } else if (!data?.me) {
   } else {
