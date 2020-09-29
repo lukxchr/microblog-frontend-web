@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ErrorOption, useForm } from "react-hook-form";
 import { AuthLayout } from "../components/AuthLayout";
-import { useRegisterMutation } from "../generated/graphql";
+import { useRegisterUserMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { FormField } from "../components/FormField";
 import { FormSubmit } from "../components/FormSubmit";
@@ -18,7 +18,7 @@ interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
-  const [, registerUser] = useRegisterMutation();
+  const [, registerUser] = useRegisterUserMutation();
   const {
     register,
     handleSubmit,
@@ -30,7 +30,13 @@ const Register: React.FC<registerProps> = ({}) => {
 
   const password = watch("password");
   const onSubmit = async (data) => {
-    let response = await registerUser(data);
+    let response = await registerUser({
+      options: {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+    });
     if (response.data?.register.errors) {
       response.data.register.errors.forEach(({ field, message }) => {
         setError(field as "username" | "password", {
@@ -50,6 +56,12 @@ const Register: React.FC<registerProps> = ({}) => {
           name="username"
           ref={register()}
           error={errors?.username?.message}
+        />
+        <FormField
+          name="email"
+          type="email"
+          ref={register()}
+          error={errors?.email?.message}
         />
         <FormField
           name="password"

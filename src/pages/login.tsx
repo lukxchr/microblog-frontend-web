@@ -9,7 +9,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 type Inputs = {
-  username: string;
+  usernameOrEmail: string;
   password: string;
   rememberMe: boolean;
 };
@@ -23,11 +23,11 @@ const Login: React.FC<registerProps> = ({}) => {
   const { register, handleSubmit, errors, setError, formState } = useForm<
     Inputs
   >();
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     let response = await login(data);
     if (response.data?.login.errors) {
       response.data.login.errors.forEach(({ field, message }) => {
-        setError(field as "username" | "password", {
+        setError(field as "usernameOrEmail" | "password", {
           type: "manual",
           message,
         });
@@ -41,9 +41,10 @@ const Login: React.FC<registerProps> = ({}) => {
     <AuthLayout header="Sign in to your account">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          name="username"
+          name="usernameOrEmail"
+          label="Username or email"
           ref={register()}
-          error={errors?.username?.message}
+          error={errors?.usernameOrEmail?.message}
         />
         <FormField
           name="password"
