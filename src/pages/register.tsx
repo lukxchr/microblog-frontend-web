@@ -51,8 +51,15 @@ const Register: React.FC<registerProps> = ({}) => {
   };
 
   return (
-    <AuthLayout header="Create new account">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <AuthLayout
+      header="Create new account"
+      subheader={{
+        text: "log in to your account",
+        href: "/login",
+        prefix: "Or ",
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           name="username"
           ref={register()}

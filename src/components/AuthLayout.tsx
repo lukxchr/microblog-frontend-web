@@ -1,9 +1,12 @@
+import Link from "next/link";
 import React, { Children } from "react";
 
 interface AuthLayoutProps {
   children: JSX.Element | JSX.Element[] | null;
   header: string;
-  subheader?: string;
+  subheader?:
+    | string
+    | { text: string; href: string; prefix?: string; sufix?: string };
 }
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({
@@ -50,7 +53,19 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               {header}
             </h2>
             <p className="mt-2 text-sm leading-5 text-gray-600 max-w">
-              {subheader}
+              {!subheader || typeof subheader === "string" ? (
+                subheader
+              ) : (
+                <>
+                  {subheader.prefix}
+                  <Link href={subheader.href}>
+                    <a className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                      {subheader.text}
+                    </a>
+                  </Link>
+                  {subheader.sufix}
+                </>
+              )}
             </p>
           </div>
           <div className="mt-0">
