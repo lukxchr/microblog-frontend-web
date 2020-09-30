@@ -7,6 +7,7 @@ import { FormField } from "../components/FormField";
 import { FormSubmit } from "../components/FormSubmit";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import Link from "next/link";
 
 type Inputs = {
   usernameOrEmail: string;
@@ -71,12 +72,11 @@ const Login: React.FC<registerProps> = ({}) => {
           </div>
 
           <div className="text-sm leading-5">
-            <a
-              href="#"
-              className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-            >
-              Forgot your password?
-            </a>
+            <Link href="/reset-password">
+              <a className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                Forgot your password?
+              </a>
+            </Link>
           </div>
         </div>
         <FormSubmit title="Sign in" isSubmitting={formState.isSubmitting} />

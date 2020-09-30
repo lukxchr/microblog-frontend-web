@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { ErrorOption, useForm } from "react-hook-form";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { AuthLayout } from "../components/AuthLayout";
 import { useRegisterUserMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 
 type Inputs = {
   username: string;
+  email: string;
   password: string;
   confirmPassword: string;
 };
@@ -29,7 +30,7 @@ const Register: React.FC<registerProps> = ({}) => {
   } = useForm<Inputs>();
 
   const password = watch("password");
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     let response = await registerUser({
       options: {
         username: data.username,
@@ -39,7 +40,7 @@ const Register: React.FC<registerProps> = ({}) => {
     });
     if (response.data?.register.errors) {
       response.data.register.errors.forEach(({ field, message }) => {
-        setError(field as "username" | "password", {
+        setError(field as "username" | "password" | "email", {
           type: "manual",
           message,
         });
@@ -71,7 +72,7 @@ const Register: React.FC<registerProps> = ({}) => {
         />
         <FormField
           name="confirmPassword"
-          label="Confirm Password"
+          label="Confirm password"
           type="password"
           ref={register({
             validate: (value) => value === password || "Passwords don't match",

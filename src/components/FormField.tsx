@@ -13,7 +13,9 @@ export const FormField = React.forwardRef<HTMLInputElement, Props>(
     <div>
       <label
         htmlFor={name}
-        className="block text-sm font-medium leading-5 text-gray-700 capitalize"
+        className={`block text-sm font-medium leading-5 text-gray-700 ${
+          !label && "capitalize"
+        }`}
       >
         {label || name}
       </label>

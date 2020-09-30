@@ -3,9 +3,14 @@ import React, { Children } from "react";
 interface AuthLayoutProps {
   children: JSX.Element | JSX.Element[] | null;
   header: string;
+  subheader?: string;
 }
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, header }) => {
+export const AuthLayout: React.FC<AuthLayoutProps> = ({
+  children,
+  header,
+  subheader,
+}) => {
   return (
     <div className="min-h-screen bg-white flex">
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
@@ -44,6 +49,9 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, header }) => {
             <h2 className="mt-6 text-3xl leading-9 font-extrabold text-gray-900">
               {header}
             </h2>
+            <p className="mt-2 text-sm leading-5 text-gray-600 max-w">
+              {subheader}
+            </p>
           </div>
           <div className="mt-0">
             <div>

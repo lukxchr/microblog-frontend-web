@@ -7,7 +7,7 @@ import { usePostsQuery } from "../generated/graphql";
 
 function Home() {
   const [{ data }] = usePostsQuery();
-  console.log(data);
+  //console.log(data);
   return (
     <div>
       <Head>
