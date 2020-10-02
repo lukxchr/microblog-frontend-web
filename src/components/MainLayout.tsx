@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { Context, useContext, useEffect, useState } from "react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
+import { useAlert } from "../utils/AlertContext";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileSidebar } from "./MobileSidebar";
 
@@ -8,6 +9,7 @@ interface MainLayoutProps {}
 
 export const MainLayout: React.FC<MainLayoutProps> = ({}) => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const { setWarningAlert, setErrorAlert, setSuccessAlert } = useAlert();
 
   let username: string = "";
   const [{ data, fetching }] = useMeQuery({
@@ -113,8 +115,25 @@ export const MainLayout: React.FC<MainLayoutProps> = ({}) => {
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               {/* <!-- Replace with your content --> */}
-              <div className="py-4">
-                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+              <div className="py-4 space-y-4 space-x-4">
+                <button
+                  className="bg-red-800"
+                  onClick={() => setErrorAlert("scary error")}
+                >
+                  Show my an error
+                </button>
+                <button
+                  className="bg-orange-500"
+                  onClick={() => setWarningAlert("Ingoreable warning")}
+                >
+                  Show my a warning
+                </button>
+                <button
+                  className="bg-green-800"
+                  onClick={() => setSuccessAlert("GREAT SUCCESS !!!")}
+                >
+                  Great success
+                </button>
               </div>
               {/* <!-- /End replace --> */}
             </div>

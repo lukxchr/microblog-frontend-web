@@ -3,6 +3,7 @@ import { Transition } from "@tailwindui/react";
 import Link from "next/link";
 import { getInitialsForUsername } from "../utils/getInitialsForUsername";
 import { useLogoutMutation } from "../generated/graphql";
+import { useAlert } from "../utils/AlertContext";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -16,6 +17,11 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
   username,
 }) => {
   const [, logout] = useLogoutMutation();
+  const { setSuccessAlert } = useAlert();
+  const logoutUser = () => {
+    logout();
+    setSuccessAlert("You're logged out");
+  };
 
   return (
     <div className="md:hidden">
@@ -263,7 +269,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({
                 {username ? (
                   <a
                     className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 cursor-pointer"
-                    onClick={() => logout()}
+                    onClick={() => logoutUser()}
                   >
                     Log out
                   </a>

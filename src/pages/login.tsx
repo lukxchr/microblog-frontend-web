@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AuthLayout } from "../components/AuthLayout";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ import { FormSubmit } from "../components/FormSubmit";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import Link from "next/link";
+import { useAlert } from "../utils/AlertContext";
 
 type Inputs = {
   usernameOrEmail: string;
@@ -20,6 +21,7 @@ interface registerProps {}
 const Login: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
+  const { setSuccessAlert } = useAlert();
 
   const { register, handleSubmit, errors, setError, formState } = useForm<
     Inputs
@@ -34,6 +36,7 @@ const Login: React.FC<registerProps> = ({}) => {
         });
       });
     } else if (response.data?.login.user) {
+      setSuccessAlert("You're logged in");
       router.push("/");
     }
   };

@@ -8,6 +8,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useRouter } from "next/router";
 import { useChangePasswordMutation } from "../../generated/graphql";
+import { useAlert } from "../../utils/AlertContext";
 
 interface Props {}
 
@@ -19,6 +20,7 @@ type Inputs = {
 export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
+  const { setSuccessAlert } = useAlert();
 
   const {
     register,
@@ -45,6 +47,7 @@ export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
         });
       });
     } else if (response.data?.changePassword.user) {
+      setSuccessAlert("Password changed. You're logged in.");
       router.push("/");
     }
   };

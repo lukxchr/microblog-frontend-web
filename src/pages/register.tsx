@@ -7,6 +7,7 @@ import { FormField } from "../components/FormField";
 import { FormSubmit } from "../components/FormSubmit";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useAlert } from "../utils/AlertContext";
 
 type Inputs = {
   username: string;
@@ -20,6 +21,7 @@ interface registerProps {}
 const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, registerUser] = useRegisterUserMutation();
+  const { setSuccessAlert } = useAlert();
   const {
     register,
     handleSubmit,
@@ -46,6 +48,7 @@ const Register: React.FC<registerProps> = ({}) => {
         });
       });
     } else if (response.data?.register.user) {
+      setSuccessAlert("Account created. You're logged in.");
       router.push("/login");
     }
   };
