@@ -11,7 +11,7 @@ function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Microblog | Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout></MainLayout>

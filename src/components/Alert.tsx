@@ -27,9 +27,9 @@ export const Alert: React.FC<AlertProps> = () => {
         enterTo="translate-y-0"
       >
         {alert === null ? null : (
-          <div className="absolute bottom-4 flex justify-center w-full">
+          <div className="absolute bottom-4 flex justify-center w-full md:w-auto md:left-80 md:right-96">
             <div
-              className={`w-10/12 md:w-1/2 z-0 rounded-md bg-${
+              className={`w-10/12 md:w-full_ z-10 rounded-md bg-${
                 colors[alert.type].background
               } p-4`}
             >
