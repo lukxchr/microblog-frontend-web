@@ -15,10 +15,9 @@ export const CreatePostForm: React.FC = ({}) => {
   const postText = watch("text");
 
   const onSubmit = async (data: any) => {
-    const reponse = await createPost({ text: data.text });
-    console.log(reponse);
-    if (reponse.error) {
-      setErrorAlert(reponse.error.message);
+    const { error } = await createPost({ text: data.text });
+    if (error?.message.includes("not authenticated")) {
+      setErrorAlert("You need to log in to add posts");
     } else {
       setSuccessAlert("Post added");
       reset();
@@ -30,7 +29,6 @@ export const CreatePostForm: React.FC = ({}) => {
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-between items-center">
           <textarea
-            //className="form-textarea bg-gray-700 w-full mr-2 transition duration-150 ease-in-out sm:text-sm sm:leading-5 text-gray-100"
             name="text"
             className=" border-gray-300 appearance-none min-w-0 w-full bg-gray-100 border border-transparent rounded-md py-2 px-4 mr-4 text-base leading-6 text-gray-800 placeholder-gray-500 focus:outline-none focus:shadow-outline-gray focus:placeholder-gray-400 transition duration-150 ease-in-out"
             rows={2}

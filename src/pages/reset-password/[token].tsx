@@ -10,14 +10,12 @@ import { useRouter } from "next/router";
 import { useChangePasswordMutation } from "../../generated/graphql";
 import { useAlert } from "../../utils/AlertContext";
 
-interface Props {}
-
 type Inputs = {
   password: string;
   confirmPassword: string;
 };
 
-export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
+export const ResetPassword: NextPage<{}> = () => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
   const { setSuccessAlert } = useAlert();
@@ -32,9 +30,10 @@ export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
   } = useForm<Inputs>();
 
   const password = watch("password");
+
   const onSubmit = async (data: any) => {
     let response = await changePassword({
-      token,
+      token: typeof router.query.token === "string" ? router.query.token : "",
       newPassword: password,
     });
 
@@ -77,12 +76,6 @@ export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
       </form>
     </AuthLayout>
   );
-};
-
-ResetPassword.getInitialProps = ({ query }) => {
-  return {
-    token: query.token as string,
-  };
 };
 
 export default withUrqlClient(createUrqlClient)(ResetPassword);

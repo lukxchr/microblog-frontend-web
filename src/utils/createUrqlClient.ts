@@ -1,13 +1,27 @@
-import { dedupExchange, fetchExchange } from "urql";
 import { cacheExchange } from "@urql/exchange-graphcache";
+import { dedupExchange, Exchange, fetchExchange } from "urql";
+import { pipe, tap } from "wonka";
 import {
-  LogoutMutation,
-  MeQuery,
-  MeDocument,
   LoginMutation,
+  LogoutMutation,
+  MeDocument,
+  MeQuery,
   RegisterUserMutation,
 } from "../generated/graphql";
+import { useAlert } from "./AlertContext";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+
+//add errorExchange to createUrqlClient below to use this
+// const errorExchange: Exchange = ({ forward }) => (ops$) => {
+//   return pipe(
+//     forward(ops$),
+//     tap(({ error }) => {
+//       if (error) {
+//         console.log("inside urql global error handler");
+//       }
+//     })
+//   );
+// };
 
 export const createUrqlClient = (ssrExchange: any) => ({
   url: "http://localhost:4000/graphql",
