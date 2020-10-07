@@ -17,7 +17,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ username }) => {
   };
 
   return (
-    <div className="hidden z-10 md:flex md:flex-shrink-0">
+    <div className="hidden z-10 md:flex md:flex-shrink-0 border-gray-700 border-r-2">
       <div className="flex flex-col w-64">
         {/* <!-- Sidebar component, swap this element with another sidebar if you like --> */}
         <div className="flex flex-col h-0 flex-1 bg-gray-800">

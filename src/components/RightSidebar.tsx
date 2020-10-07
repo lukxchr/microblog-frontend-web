@@ -5,7 +5,7 @@ interface RightSidebarProps {}
 
 export const RightSidebar: React.FC<RightSidebarProps> = ({}) => {
   return (
-    <div className="hidden z-10 md:flex md:flex-shrink-0">
+    <div className="hidden z-10 md:flex md:flex-shrink-0 border-gray-700 border-l-2">
       <div className="flex flex-col w-80">
         <form className="pt-4 pb-2 px-2 sm:flex sm:max-w-md bg-gray-800">
           <label htmlFor="search" className="sr-only">
