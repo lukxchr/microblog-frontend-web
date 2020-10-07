@@ -5,10 +5,17 @@ import { withUrqlClient } from "next-urql";
 import { usePostsQuery } from "../generated/graphql";
 import { useAlert } from "../utils/AlertContext";
 import { CreatePostForm } from "../components/CreatePostForm";
+import { Post } from "../components/Post";
+import React, { useEffect } from "react";
+import { PostList } from "../components/PostList";
 //import styles from "../styles/Home.module.css";
 
 function Home() {
-  const [{ data }] = usePostsQuery();
+  const [{ data, fetching }] = usePostsQuery({
+    variables: {
+      limit: 10,
+    },
+  });
   const { setWarningAlert, setErrorAlert, setSuccessAlert } = useAlert();
 
   //console.log(data);
@@ -16,26 +23,7 @@ function Home() {
     <div>
       <MainLayout header="Home">
         <CreatePostForm></CreatePostForm>
-        <div className="py-4 space-y-4 space-x-4">
-          <button
-            className="bg-red-800"
-            onClick={() => setErrorAlert("scary error")}
-          >
-            Show my an error
-          </button>
-          <button
-            className="bg-orange-500"
-            onClick={() => setWarningAlert("Ingoreable warning")}
-          >
-            Show my a warning
-          </button>
-          <button
-            className="bg-green-800"
-            onClick={() => setSuccessAlert("GREAT SUCCESS !!!")}
-          >
-            Great success
-          </button>
-        </div>
+        <PostList postsData={data}></PostList>
       </MainLayout>
     </div>
   );

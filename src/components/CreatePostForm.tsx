@@ -25,12 +25,12 @@ export const CreatePostForm: React.FC = ({}) => {
   };
 
   return (
-    <div className="px-4 py-2 flex justify-between bg-gray-100 border-gray-300 border-b-2">
+    <div className="px-4 py-2 flex justify-between bg-gray-800 border-gray-700 border-b-2">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-between items-center">
           <textarea
             name="text"
-            className=" border-gray-300 appearance-none min-w-0 w-full bg-gray-100 border border-transparent rounded-md py-2 px-4 mr-4 text-base leading-6 text-gray-800 placeholder-gray-500 focus:outline-none focus:shadow-outline-gray focus:placeholder-gray-400 transition duration-150 ease-in-out"
+            className="appearance-none min-w-0 w-full bg-gray-700 border border-transparent rounded-md py-2 px-4 mr-4 text-base leading-6 text-gray-100 placeholder-gray-500 focus:outline-none focus:shadow-outline-gray focus:placeholder-gray-400 transition duration-150 ease-in-out"
             rows={2}
             style={{ resize: "none" }}
             placeholder="Say something..."
