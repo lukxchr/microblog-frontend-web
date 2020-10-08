@@ -6,24 +6,35 @@ import { usePostsQuery } from "../generated/graphql";
 import { useAlert } from "../utils/AlertContext";
 import { CreatePostForm } from "../components/CreatePostForm";
 import { Post } from "../components/Post";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PostList } from "../components/PostList";
 //import styles from "../styles/Home.module.css";
 
 function Home() {
+  const [postsQueryVariables, setPostsQueryVariables] = useState({
+    limit: 10,
+    cursor: null as string | null,
+  });
   const [{ data, fetching }] = usePostsQuery({
-    variables: {
-      limit: 10,
-    },
+    variables: postsQueryVariables,
   });
   const { setWarningAlert, setErrorAlert, setSuccessAlert } = useAlert();
 
-  //console.log(data);
   return (
     <div>
       <MainLayout header="Home">
         <CreatePostForm></CreatePostForm>
-        <PostList postsData={data}></PostList>
+        {data && (
+          <PostList
+            postsData={data}
+            onLoadMore={() => {
+              setPostsQueryVariables({
+                ...postsQueryVariables,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              });
+            }}
+          ></PostList>
+        )}
       </MainLayout>
     </div>
   );
