@@ -15,6 +15,10 @@ export const CreatePostForm: React.FC = ({}) => {
   const postText = watch("text");
 
   const onSubmit = async (data: any) => {
+    if (!postText) {
+      setErrorAlert("You can't add post without any content");
+      return;
+    }
     const { error } = await createPost({ text: data.text });
     if (error?.message.includes("not authenticated")) {
       setErrorAlert("You need to log in to add posts");

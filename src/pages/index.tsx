@@ -1,5 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
+import { POSTS_LIMIT } from "../../constants";
 import { CreatePostForm } from "../components/CreatePostForm";
 import { MainLayout } from "../components/MainLayout";
 import { PostList } from "../components/PostList";
@@ -10,7 +11,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 
 function Home() {
   const [postsQueryVariables, setPostsQueryVariables] = useState({
-    limit: 10,
+    limit: POSTS_LIMIT,
     cursor: null as string | null,
   });
   const [{ data, fetching }] = usePostsQuery({
