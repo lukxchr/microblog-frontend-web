@@ -25,7 +25,9 @@ export const PostList: React.FC<PostListProps> = ({
               key={post.id}
               text={post.textSnippet}
               comments={10}
-              likes={55}
+              likes={post.likes}
+              creator={post.creator}
+              createdAt={post.createdAt}
             />
           ))}
         </div>

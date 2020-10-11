@@ -49,7 +49,7 @@ const Register: React.FC<registerProps> = ({}) => {
       });
     } else if (response.data?.register.user) {
       setSuccessAlert("Account created. You're logged in.");
-      router.push("/login");
+      router.push("/");
     }
   };
 

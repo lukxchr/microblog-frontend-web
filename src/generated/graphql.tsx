@@ -45,6 +45,7 @@ export type Post = {
   text: Scalars['String'];
   likes: Scalars['Float'];
   creatorId: Scalars['Float'];
+  creator: User;
   textSnippet: Scalars['String'];
 };
 
@@ -249,7 +250,11 @@ export type PostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId'>
+      & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId' | 'likes'>
+      & { creator: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+      ) }
     )> }
   ) }
 );
@@ -370,6 +375,14 @@ export const PostsDocument = gql`
       updatedAt
       textSnippet
       creatorId
+      likes
+      creator {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
     }
   }
 }

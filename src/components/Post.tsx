@@ -1,21 +1,33 @@
 import React from "react";
+import { User } from "../generated/graphql";
+import { formatDistanceToNow } from "date-fns";
 
 interface PostProps {
   text: string;
   likes: number;
   comments: number;
+  creator: User;
+  createdAt: string;
 }
 
-export const Post: React.FC<PostProps> = ({ text, likes, comments }) => {
+export const Post: React.FC<PostProps> = ({
+  text,
+  likes,
+  comments,
+  creator,
+  createdAt,
+}) => {
   return (
-    <div className="bg-gray-800 text-gray-100 w-full border-gray-700 border-b-2 p-4">
-      <div className="flex justify-between">
-        <div className="text-lg font-bold tracking-wide">PosterPlaceholder</div>
-        <div>99 minutes ago</div>
+    <div className="bg-gray-800 text-gray-100 w-full border-gray-700 border-b-2 px-4 py-2">
+      <div className="flex justify-between items-center">
+        <div className="font-semibold">@{creator.username}</div>
+        <div className="text-xs">
+          {formatDistanceToNow(new Date(parseInt(createdAt))) + " ago"}
+        </div>
       </div>
-      <div className="my-2">{text}</div>
+      <div className="my-1 text-justify">{text}</div>
       <div className="flex justify-between">
-        <div className="flex items-center">
+        <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
             className="h-6"
             fill="none"
@@ -31,7 +43,7 @@ export const Post: React.FC<PostProps> = ({ text, likes, comments }) => {
           </svg>
           <p className="ml-1 text-lg">{comments}</p>
         </div>
-        <div>
+        <div className="hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
             className="h-6"
             fill="none"
@@ -47,7 +59,7 @@ export const Post: React.FC<PostProps> = ({ text, likes, comments }) => {
           </svg>
         </div>
         <div>
-          <div className="flex items-center">
+          <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
             <svg
               className="h-6"
               fill="none"
@@ -64,7 +76,7 @@ export const Post: React.FC<PostProps> = ({ text, likes, comments }) => {
             <p className="ml-1 text-lg">{likes}</p>
           </div>
         </div>
-        <div>
+        <div className="hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
             className="h-6"
             fill="none"
