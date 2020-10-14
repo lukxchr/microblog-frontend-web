@@ -23,11 +23,13 @@ export const PostList: React.FC<PostListProps> = ({
           {postsData.posts.posts.map((post) => (
             <Post
               key={post.id}
-              text={post.textSnippet}
-              comments={10}
-              likes={post.likes}
-              creator={post.creator}
-              createdAt={post.createdAt}
+              post={post}
+              // id={post.id}
+              // text={post.textSnippet}
+              // comments={10}
+              // likes={post.likesCount}
+              // creator={post.creator}
+              // createdAt={post.createdAt}
             />
           ))}
         </div>

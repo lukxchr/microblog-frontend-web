@@ -43,7 +43,7 @@ export type Post = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   text: Scalars['String'];
-  likes: Scalars['Float'];
+  likesCount: Scalars['Float'];
   creatorId: Scalars['Float'];
   creator: User;
   textSnippet: Scalars['String'];
@@ -60,6 +60,7 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  toggleLike: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
@@ -68,6 +69,11 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   resetPasssword: Scalars['Boolean'];
   changePassword: UserResponse;
+};
+
+
+export type MutationToggleLikeArgs = {
+  postId: Scalars['Int'];
 };
 
 
@@ -126,12 +132,21 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
 };
 
-export type ErrorFragmentFragment = (
+export type ErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
 );
 
-export type UserFragmentFragment = (
+export type PostSnippetFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId' | 'likesCount'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
+);
+
+export type UserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username'>
 );
@@ -148,10 +163,10 @@ export type ChangePasswordMutation = (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
-      & ErrorFragmentFragment
+      & ErrorFragment
     )>>, user?: Maybe<(
       { __typename?: 'User' }
-      & UserFragmentFragment
+      & UserFragment
     )> }
   ) }
 );
@@ -181,10 +196,10 @@ export type LoginMutation = (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
-      & ErrorFragmentFragment
+      & ErrorFragment
     )>>, user?: Maybe<(
       { __typename?: 'User' }
-      & UserFragmentFragment
+      & UserFragment
     )> }
   ) }
 );
@@ -208,10 +223,10 @@ export type RegisterUserMutation = (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
-      & ErrorFragmentFragment
+      & ErrorFragment
     )>>, user?: Maybe<(
       { __typename?: 'User' }
-      & UserFragmentFragment
+      & UserFragment
     )> }
   ) }
 );
@@ -226,6 +241,16 @@ export type ResetPasswordMutation = (
   & Pick<Mutation, 'resetPasssword'>
 );
 
+export type ToggleLikeMutationVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
+
+
+export type ToggleLikeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'toggleLike'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -233,7 +258,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & UserFragmentFragment
+    & UserFragment
   )> }
 );
 
@@ -250,23 +275,33 @@ export type PostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId' | 'likes'>
-      & { creator: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
-      ) }
+      & PostSnippetFragment
     )> }
   ) }
 );
 
-export const ErrorFragmentFragmentDoc = gql`
-    fragment ErrorFragment on FieldError {
+export const ErrorFragmentDoc = gql`
+    fragment Error on FieldError {
   field
   message
 }
     `;
-export const UserFragmentFragmentDoc = gql`
-    fragment UserFragment on User {
+export const PostSnippetFragmentDoc = gql`
+    fragment PostSnippet on Post {
+  id
+  createdAt
+  updatedAt
+  textSnippet
+  creatorId
+  likesCount
+  creator {
+    id
+    username
+  }
+}
+    `;
+export const UserFragmentDoc = gql`
+    fragment User on User {
   id
   username
 }
@@ -275,15 +310,15 @@ export const ChangePasswordDocument = gql`
     mutation changePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
     errors {
-      ...ErrorFragment
+      ...Error
     }
     user {
-      ...UserFragment
+      ...User
     }
   }
 }
-    ${ErrorFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserFragmentDoc}`;
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
@@ -306,15 +341,15 @@ export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
     errors {
-      ...ErrorFragment
+      ...Error
     }
     user {
-      ...UserFragment
+      ...User
     }
   }
 }
-    ${ErrorFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
@@ -332,15 +367,15 @@ export const RegisterUserDocument = gql`
     mutation RegisterUser($options: UsernamePasswordInput!) {
   register(options: $options) {
     errors {
-      ...ErrorFragment
+      ...Error
     }
     user {
-      ...UserFragment
+      ...User
     }
   }
 }
-    ${ErrorFragmentFragmentDoc}
-${UserFragmentFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserFragmentDoc}`;
 
 export function useRegisterUserMutation() {
   return Urql.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument);
@@ -354,13 +389,22 @@ export const ResetPasswordDocument = gql`
 export function useResetPasswordMutation() {
   return Urql.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument);
 };
+export const ToggleLikeDocument = gql`
+    mutation ToggleLike($postId: Int!) {
+  toggleLike(postId: $postId)
+}
+    `;
+
+export function useToggleLikeMutation() {
+  return Urql.useMutation<ToggleLikeMutation, ToggleLikeMutationVariables>(ToggleLikeDocument);
+};
 export const MeDocument = gql`
     query Me {
   me {
-    ...UserFragment
+    ...User
   }
 }
-    ${UserFragmentFragmentDoc}`;
+    ${UserFragmentDoc}`;
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
@@ -370,23 +414,11 @@ export const PostsDocument = gql`
   posts(limit: $limit, cursor: $cursor) {
     hasMore
     posts {
-      id
-      createdAt
-      updatedAt
-      textSnippet
-      creatorId
-      likes
-      creator {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-      }
+      ...PostSnippet
     }
   }
 }
-    `;
+    ${PostSnippetFragmentDoc}`;
 
 export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });

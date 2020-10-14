@@ -13,8 +13,10 @@ import {
   MeDocument,
   MeQuery,
   RegisterUserMutation,
+  ToggleLikeMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+import gql from "graphql-tag";
 
 //add errorExchange to createUrqlClient below to use this
 // const errorExchange: Exchange = ({ forward }) => (ops$) => {
@@ -82,6 +84,29 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          toggleLike: (_result, args, cache, info) => {
+            const { postId } = args as ToggleLikeMutationVariables;
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  likesCount
+                }
+              `,
+              { id: postId } as any
+            ); // Data or null
+            if (data) {
+              const newLikesCount = (data.likesCount as number) + 1;
+              cache.writeFragment(
+                gql`
+                  fragment __ on Post {
+                    likesCount
+                  }
+                `,
+                { id: postId, likesCount: newLikesCount } as any
+              );
+            }
+          },
           createPost: (_result, args, cache, info) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(

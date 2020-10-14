@@ -1,31 +1,27 @@
 import React from "react";
-import { User } from "../generated/graphql";
+import {
+  PostSnippetFragment,
+  User,
+  useToggleLikeMutation,
+} from "../generated/graphql";
 import { formatDistanceToNow } from "date-fns";
 
 interface PostProps {
-  text: string;
-  likes: number;
-  comments: number;
-  creator: User;
-  createdAt: string;
+  post: PostSnippetFragment;
 }
 
-export const Post: React.FC<PostProps> = ({
-  text,
-  likes,
-  comments,
-  creator,
-  createdAt,
-}) => {
+export const Post: React.FC<PostProps> = ({ post }) => {
+  const [, toggleLike] = useToggleLikeMutation();
+
   return (
     <div className="bg-gray-800 text-gray-100 w-full border-gray-700 border-b-2 px-4 py-2">
       <div className="flex justify-between items-center">
-        <div className="font-semibold">@{creator.username}</div>
+        <div className="font-semibold">@{post.creator.username}</div>
         <div className="text-xs">
-          {formatDistanceToNow(new Date(parseInt(createdAt))) + " ago"}
+          {formatDistanceToNow(new Date(parseInt(post.createdAt))) + " ago"}
         </div>
       </div>
-      <div className="my-1 text-justify">{text}</div>
+      <div className="my-1 text-justify">{post.textSnippet}</div>
       <div className="flex justify-between">
         <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
@@ -41,7 +37,7 @@ export const Post: React.FC<PostProps> = ({
               d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
             />
           </svg>
-          <p className="ml-1 text-lg">{comments}</p>
+          <p className="ml-1 text-lg">{99}</p>
         </div>
         <div className="hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
@@ -59,7 +55,10 @@ export const Post: React.FC<PostProps> = ({
           </svg>
         </div>
         <div>
-          <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
+          <div
+            className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer"
+            onClick={() => toggleLike({ postId: post.id })}
+          >
             <svg
               className="h-6"
               fill="none"
@@ -73,7 +72,7 @@ export const Post: React.FC<PostProps> = ({
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <p className="ml-1 text-lg">{likes}</p>
+            <p className="ml-1 text-lg">{post.likesCount}</p>
           </div>
         </div>
         <div className="hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
