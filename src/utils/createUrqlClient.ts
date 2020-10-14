@@ -91,19 +91,28 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 fragment _ on Post {
                   id
                   likesCount
+                  hasLiked
                 }
               `,
               { id: postId } as any
             ); // Data or null
             if (data) {
-              const newLikesCount = (data.likesCount as number) + 1;
+              //console.log(data);
+              const hasLiked = data.hasLiked as boolean;
+              const newLikesCount =
+                (data.likesCount as number) + (hasLiked ? -1 : 1);
               cache.writeFragment(
                 gql`
                   fragment __ on Post {
                     likesCount
+                    hasLiked
                   }
                 `,
-                { id: postId, likesCount: newLikesCount } as any
+                {
+                  id: postId,
+                  likesCount: newLikesCount,
+                  hasLiked: !hasLiked,
+                } as any
               );
             }
           },

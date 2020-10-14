@@ -44,6 +44,7 @@ export type Post = {
   updatedAt: Scalars['String'];
   text: Scalars['String'];
   likesCount: Scalars['Float'];
+  hasLiked: Scalars['Boolean'];
   creatorId: Scalars['Float'];
   creator: User;
   textSnippet: Scalars['String'];
@@ -139,7 +140,7 @@ export type ErrorFragment = (
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId' | 'likesCount'>
+  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'textSnippet' | 'creatorId' | 'likesCount' | 'hasLiked'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -294,6 +295,7 @@ export const PostSnippetFragmentDoc = gql`
   textSnippet
   creatorId
   likesCount
+  hasLiked
   creator {
     id
     username
