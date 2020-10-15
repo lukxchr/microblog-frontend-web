@@ -1,18 +1,20 @@
 import React from "react";
 import {
+  PostFragment,
   PostSnippetFragment,
+  PostSnippetFragmentDoc,
   User,
   useToggleLikeMutation,
 } from "../generated/graphql";
 import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface PostProps {
-  post: PostSnippetFragment;
+  post: PostSnippetFragment | PostFragment;
 }
 
 export const Post: React.FC<PostProps> = ({ post }) => {
   const [, toggleLike] = useToggleLikeMutation();
-
   return (
     <div className="bg-gray-800 text-gray-100 w-full border-gray-700 border-b-2 px-4 py-2">
       <div className="flex justify-between items-center">
@@ -21,24 +23,30 @@ export const Post: React.FC<PostProps> = ({ post }) => {
           {formatDistanceToNow(new Date(parseInt(post.createdAt))) + " ago"}
         </div>
       </div>
-      <div className="my-1 text-justify">{post.textSnippet}</div>
+      <div className="my-1 text-justify">
+        {post.hasOwnProperty("text")
+          ? (post as PostFragment).text
+          : (post as PostSnippetFragment).textSnippet}
+      </div>
       <div className="flex justify-between">
-        <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
-          <svg
-            className="h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-            />
-          </svg>
-          <p className="ml-1 text-lg">{99}</p>
-        </div>
+        <Link href="/post/[id]" as={`/post/${post.id}`}>
+          <div className="flex items-center hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
+            <svg
+              className="h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+              />
+            </svg>
+            <p className="ml-1 text-lg">{99}</p>
+          </div>
+        </Link>
         <div className="hover:bg-gray-700 px-2 py-1 rounded-md cursor-pointer">
           <svg
             className="h-6"

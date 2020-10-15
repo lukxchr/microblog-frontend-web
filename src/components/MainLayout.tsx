@@ -66,7 +66,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, header }) => {
         </div>
 
         <main
-          className="flex-1 relative overflow-y-auto focus:outline-none"
+          className="flex-1 relative overflow-y-auto focus:outline-none bg-gray-800"
           tabIndex={0}
         >
           <div className="max-w-7xl">{children}</div>
