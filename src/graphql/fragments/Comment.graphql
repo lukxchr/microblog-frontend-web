@@ -1,0 +1,11 @@
+fragment Comment on Comment {
+  id
+  createdAt
+  updatedAt
+  text
+  userId
+  user {
+    id
+    username
+  }
+}

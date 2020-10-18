@@ -8,6 +8,7 @@ import {
 import { pipe, tap } from "wonka";
 import {
   CreatePostMutation,
+  DeletePostMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
@@ -18,6 +19,7 @@ import {
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import gql from "graphql-tag";
 import { isServer } from "./isServer";
+import { Post } from "../components/Post";
 
 //add errorExchange to createUrqlClient below to use this
 // const errorExchange: Exchange = ({ forward }) => (ops$) => {
@@ -96,6 +98,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            deletePost: (_result, args, cache, info) => {
+              cache.invalidate({
+                __typename: "Post",
+                id: (args as DeletePostMutationVariables).id,
+              });
+            },
             toggleLike: (_result, args, cache, info) => {
               const { postId } = args as ToggleLikeMutationVariables;
               const data = cache.readFragment(

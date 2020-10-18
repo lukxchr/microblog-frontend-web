@@ -3,6 +3,7 @@ import { Router, useRouter } from "next/router";
 import React from "react";
 import { MainLayout } from "../../components/MainLayout";
 import { Post } from "../../components/Post";
+import { PostComments } from "../../components/PostComments";
 import { usePostQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
@@ -16,11 +17,15 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
     pause: id === -1,
     variables: { id },
   });
+  // console.error(error);
 
   return (
     <MainLayout header="Post">
       {data?.post ? (
-        <Post post={data.post}></Post>
+        <>
+          <Post post={data.post}></Post>
+          <PostComments postId={data.post.id}></PostComments>
+        </>
       ) : (
         <div className="text-gray-100 flex justify-center p-8">
           There is no such post. It might have been deleted.
